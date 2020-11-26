@@ -118,16 +118,17 @@ void removeWaveSelPoint(void)
 
 	if (!hys_chart.rel_points_num)
 	{
-		set_highlight_point(&hys_chart, 0);
+		set_highlight_point(&hys_chart, 1);
 		hide_highlight_point(&hys_chart);
 		hide_highlight_cell(&hytable, 0);
 	}
 	else
 	{
-		if (hys_chart.record_points_num < MAX_DIS_POINTS && hys_chart.sel_point_index == hys_chart.rel_points_num)
-		{
-			hys_chart.sel_point_index--;
-		}
+		//if (hys_chart.record_points_num < MAX_DIS_POINTS && hys_chart.sel_point_index == hys_chart.rel_points_num)
+		//{
+		//	hys_chart.sel_point_index--;
+		//}
+		hys_chart.sel_point_index = hytable.raw_sel_index - (hys_chart.start_piont - 1);
 		set_highlight_point(&hys_chart, hys_chart.sel_point_index + 1);
 		show_highlight_point(&hys_chart);
 		show_highlight_cell(&hytable, hytable.sel_index);
@@ -239,6 +240,7 @@ void fullTabledata(void)
 
 void gotopage(uint8_t page)
 {
+
 	if (currentPage == page)
 	{
 		return;
@@ -246,8 +248,34 @@ void gotopage(uint8_t page)
 
 	if (page == MAIN_PAGE)
 	{
+		if (hys_chart.record_points_num >= MAX_DIS_POINTS)
+		{
+			hys_chart.raw_hdata_index = hys_chart.record_points_num - MAX_DIS_POINTS;	
+			hys_chart.start_piont = hys_chart.raw_hdata_index + 1;
+			hys_chart.sel_point_index = MAX_DIS_POINTS - 1;
+		}
+		else if (hys_chart.record_points_num)
+		{
+			hys_chart.sel_point_index = hys_chart.record_points_num - 1;
+		}
+
+		//else if (hys_chart.record_points_num < MAX_DIS_POINTS && hys_chart.record_points_num)
+		//{
+		//	hys_chart.raw_hdata_index = 0;
+		//	hys_chart.start_piont = 1;
+		//	hys_chart.sel_point_index = hys_chart.record_points_num - 1;
+
+		//}
+		
+
 		table_canvas->hidden = 1;
 		setSizeMainPage(FULL_MAIN_PAGE);
+		if (hys_chart.record_points_num)
+		{
+			set_highlight_point(&hys_chart, hys_chart.sel_point_index + 1);
+			show_highlight_point(&hys_chart);
+		}
+
 	}
 	else if (page == SECOND_PAGE)
 	{
@@ -266,7 +294,7 @@ void gotopage(uint8_t page)
 			hytable.raw_end_index = TABLE_DATA_ROW * TABLE_DATA_COL - 1;
 			if (hytable.raw_end_index > hys_chart.record_points_num - 1)
 			{
-				hytable.raw_end_index > hys_chart.record_points_num - 1;
+				hytable.raw_end_index = hys_chart.record_points_num - 1;
 			}
 	
 			full_data(&hytable, &hys_chart);

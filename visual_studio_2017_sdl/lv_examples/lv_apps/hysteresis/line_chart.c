@@ -163,7 +163,7 @@ void xValueUpdate(line_chart* hys_wave)
 
 	lv_canvas_draw_rect(hys_wave->canvas, x_min, y_max + 5, hys_wave->x_len + 17, hys_wave->y0_off, &hys_wave->style_frame);
 
-	//画虚竖线
+	
 	float xStep = hys_wave->x_len * 1.0 / hys_wave->xStepNum;
 	uint8_t xdistans = 80 / xStep;
 	uint8_t xPoint = 1;
@@ -252,7 +252,7 @@ void init_hys_chart(line_chart* hys_wave)
 	//draw_wave(hys_wave);
 
 	//初始化选中的点并隐藏
-	hys_wave->sel_point_index = 0;
+	//hys_wave->sel_point_index = 0;
 	lv_style_copy(&hys_wave->style_sel_point, &lv_style_pretty_color);
 	hys_wave->style_sel_point.body.main_color = LV_COLOR_RED;
 	hys_wave->style_sel_point.body.grad_color = LV_COLOR_RED;

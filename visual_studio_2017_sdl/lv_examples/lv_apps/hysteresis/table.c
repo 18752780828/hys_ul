@@ -251,7 +251,12 @@ void remove_cell_data(hys_table* hytable, line_chart* hys_wave, uint16_t hys_ind
 	//	table_data_up(hytable, hys_wave);
 	//	hytable->sel_index += (TABLE_DATA_COL);
 	//}
-	if (hytable->raw_end_index >= hys_wave->record_points_num - 1)
+	if (!hys_wave->record_points_num)
+	{
+		lv_table_set_cell_value(hytable->table, 1, 1, " ");
+		return;
+	}
+	if (hytable->raw_end_index >= hys_wave->record_points_num)
 	{
 		
 		if (hytable->raw_end_index == hytable->raw_sel_index)
@@ -364,31 +369,6 @@ void table_data_up(hys_table* hytable, line_chart* hys_wave)
 	uint8_t col = 0;
 	uint8_t row = TABLE_DATA_ROW;
 
-	//for (; row > 1; row--)
-	//{
-	//	for (col = 0; col < hytable->table_col_cnt; col++)
-	//	{
-	//		strcpy(str, lv_table_get_cell_value(hytable->table, row - 1, col));
-	//		lv_table_set_cell_value(hytable->table, row, col, str);
-	//	}
-	//}
-
-	//i = hytable->raw_sel_index;
-	//strcpy(str, numTochar(1 + i / TABLE_DATA_COL));
-	//lv_table_set_cell_value(hytable->table, 1, 0, str);
-
-	//////////////////***************************************/////////////
-	//for (col = hytable->table_col_cnt - 1; col > 0 ; col--)
-	//{
-	//	strcpy(str, floatTochar(hys_wave->raw_hys_data[i--]));
-	//	lv_table_set_cell_value(hytable->table, 1, col, str);
-	//	//if (i >= hys_wave->record_points_num)
-	//	//{
-	//	//	hytable->raw_end_index = i - 1;
-	//	//	return;
-	//	//}
-	//}
-	////hytable->raw_end_index = i - 1;
 	for (; row > 1; row--)
 	{
 		for (col = 0; col < hytable->table_col_cnt; col++)
@@ -397,19 +377,45 @@ void table_data_up(hys_table* hytable, line_chart* hys_wave)
 			lv_table_set_cell_value(hytable->table, row, col, str);
 		}
 	}
-	hytable->raw_start_index -= TABLE_DATA_COL;
-	hytable->raw_end_index -= TABLE_DATA_COL;
 
-	i = hytable->raw_start_index;
+	i = hytable->raw_sel_index;
 	strcpy(str, numTochar(1 + i / TABLE_DATA_COL));
 	lv_table_set_cell_value(hytable->table, 1, 0, str);
 
-	
-	for (col = 1; col < hytable->table_col_cnt; col++)
+	////////////////***************************************/////////////
+	for (col = hytable->table_col_cnt - 1; col > 0 ; col--)
 	{
-		strcpy(str, floatTochar(hys_wave->raw_hys_data[i++]));
+		strcpy(str, floatTochar(hys_wave->raw_hys_data[i--]));
 		lv_table_set_cell_value(hytable->table, 1, col, str);
+		//if (i >= hys_wave->record_points_num)
+		//{
+		//	hytable->raw_end_index = i - 1;
+		//	return;
+		//}
 	}
+	//hytable->raw_end_index = i - 1;
+
+	//for (; row > 1; row--)
+	//{
+	//	for (col = 0; col < hytable->table_col_cnt; col++)
+	//	{
+	//		strcpy(str, lv_table_get_cell_value(hytable->table, row - 1, col));
+	//		lv_table_set_cell_value(hytable->table, row, col, str);
+	//	}
+	//}
+	//hytable->raw_start_index -= TABLE_DATA_COL;
+	//hytable->raw_end_index -= TABLE_DATA_COL;
+
+	//i = hytable->raw_start_index;
+	//strcpy(str, numTochar(1 + i / TABLE_DATA_COL));
+	//lv_table_set_cell_value(hytable->table, 1, 0, str);
+
+	//
+	//for (col = 1; col < hytable->table_col_cnt; col++)
+	//{
+	//	strcpy(str, floatTochar(hys_wave->raw_hys_data[i++]));
+	//	lv_table_set_cell_value(hytable->table, 1, col, str);
+	//}
 	//hytable->raw_end_index = i - 1;
 
 }

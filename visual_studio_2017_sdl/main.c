@@ -98,7 +98,7 @@ int main(int argc, char** argv)
 	uint8_t num = 0;
 	uint8_t dir = 1;
 
-	for (uint16_t i = 0; i < 90; i++)
+	for (uint16_t i = 0; i < 28; i++)
 	{
 		addWavedata(hys_data_buf[i]);
 	}
@@ -106,16 +106,20 @@ int main(int argc, char** argv)
 	gotopage(SECOND_PAGE);
 	device_icon(DEVICE_ONLINE);
 	set_bat_level(20);
-
-	for (uint16_t i = 0; i < 50; i++)
+	
+	for (uint16_t i = 0; i < 23; i++)
 	{
 		SelectToRight();
 	}
 
-	int j = 0;
-	for (uint16_t i = 0; i < 38; i++)
+	for (uint16_t i = 0; i < 0; i++)
 	{
-		//SelectToLeft();
+		SelectToLeft();
+	}
+	//gotopage(MAIN_PAGE);
+	int j = 0;
+	for (uint16_t i = 0; i < 0; i++)
+	{
 		j = 0;
 		while (j++ < 51)
 		{
@@ -123,12 +127,13 @@ int main(int argc, char** argv)
 			lv_task_handler();
 
 		}
-		removeWaveSelPoint();
+		//removeWaveSelPoint();
 		//removeWavedata(0);
 
 	}
 
-
+	uint8_t sim_step = 0;
+	i = 0;
 	while (1)
 	{   
 		lv_tick_inc(1);
@@ -139,53 +144,92 @@ int main(int argc, char** argv)
 		{
 			old_Milliseconds = sys.wMilliseconds;
 		}
-		if (sys.wSecond % 2 == 0 && old_second != sys.wSecond)
+		if (sys.wSecond % 1 == 0 && old_second != sys.wSecond)
 		{
 			old_second = sys.wSecond;
-			
-			//set_bat_level(num);
-			//if (dir)
-			//{
-			//	num += 10;
-			//}
-			//else
-			//{
-			//	num -= 10;
-			//}
-
-			//if (num == 0 || num >= 100)
-			//{
-			//	dir = !dir;
-			//}
 			if (num < 2)
 			{
-				
-				//addWavedata(hys_data_buf[num]);
 				num++;
-				//SelectToLeft();
-				//SelectToRight();
-				//delete_message();
-				//removeWavedata(getSelectPointindex());
-				//highLightPoint(num);
-				//removeWavedata(8-num);
-				//SelectToRight();
-				//removeWavedata(0);
 			}
-			else if (num < 70)
+			else if (num < 100)
 			{
-				num=0;
-				removeWaveSelPoint();
-				//SelectToLeft();
-				//gotopage(MAIN_PAGE);
+				//num = 0;
 			}
-			
+	
+			switch (sim_step)
+			{
+			case 1:
+				if (++i > 30)
+				{
+					i = 0;
+					sim_step++;
+					break;
+				}
+				addWavedata(hys_data_buf[i]);
 
-			//dis_highlight_point(&hys_chart, num++);
-			//if (num > hys_chart.points_num)
-			//{
-			//	num = 1;
-			//}
+				break;
+			case 2:
+				if (++i > 1)
+				{
+					i = 0;
+					sim_step++;
+					break;
+				}
+				gotopage(SECOND_PAGE);
+				break;
+			case 3:
+				if (++i > 10)
+				{
+					i = 0;
+					sim_step++;
+					break;
+				}
+				SelectToLeft();
+				break;
+			case 4:
+				if (++i > 5)
+				{
+					i = 0;
+					sim_step++;
+					break;
+				}
+				SelectToRight();
+				break;
+			case 5:
+				if (++i > 25)
+				{
+					i = 0;
+					sim_step++;
+					break;
+				}
 
+				SelectToLeft();
+				break;
+			case 6:
+				if (++i > 10)
+				{
+					i = 0;
+					sim_step++;
+					break;
+				}
+				removeWaveSelPoint();
+				break;
+			case 7:
+				if (++i > 1)
+				{
+					i = 0;
+					sim_step = 1;
+					break;
+				}
+				gotopage(MAIN_PAGE);
+				break;
+			//case 8:
+			//	addWavedata(hys_data_buf[num]);
+			//	break;
+
+			default:
+				break;
+			}
 		}
 		/*********************************ÊÂ¼şÄ£Äâ**********************************************/
 
