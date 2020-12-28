@@ -14,8 +14,8 @@ extern "C" {
 #include "lvgl.h"
 #include "lv_ex_conf.h"
 #else
-#include "../../../lvgl/lvgl.h"
-#include "../../../lv_ex_conf.h"
+#include "../../../../lvgl/lvgl.h"
+#include "../../../../lv_ex_conf.h"
 #endif
 
 #if LV_USE_LINE_CHART
@@ -33,6 +33,9 @@ extern "C" {
 
 //¶¨Òåµã°ë¾¶
 #define  POINT_RADIUS     7
+
+//gun extern C
+#define min(x, y) ({int a = x; int b = y; (a > b) ? b : a;})
 
 typedef struct 
 {

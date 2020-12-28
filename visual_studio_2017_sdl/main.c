@@ -69,7 +69,7 @@ int main(int argc, char** argv)
 
 	/**************仿真参数 start *************/
 
-	uint16_t yValueMax = 24;
+	uint16_t yValueMax = 18;
 	uint16_t points_num = 10;
 	int i = 0;
 	for (i = 0; i < RAW_DATA_LEN; i++)
@@ -77,6 +77,10 @@ int main(int argc, char** argv)
 		hys_data_buf[i] = (rand() % (uint16_t)(yValueMax * 25 - 1)) / 25.0;
 	}
 
+	for (i = 0; i < RAW_DATA_LEN; i++)
+	{
+		hys_data_buf[i] = 10 + ((int)hys_data_buf[i] - yValueMax / 2) * 0.03;
+	}
 	/**************仿真参数 stop *************/
 	bootAnimation();
 	//while (1)
@@ -98,16 +102,17 @@ int main(int argc, char** argv)
 	uint8_t num = 0;
 	uint8_t dir = 1;
 
-	for (uint16_t i = 0; i < 28; i++)
+	for (uint16_t i = 0; i < 18; i++)
 	{
 		addWavedata(hys_data_buf[i]);
 	}
 
-	gotopage(SECOND_PAGE);
+
+	//gotopage(SECOND_PAGE);
 	device_icon(DEVICE_ONLINE);
-	set_bat_level(20);
+	set_bat_level(100);
 	
-	for (uint16_t i = 0; i < 23; i++)
+	for (uint16_t i = 0; i < 0; i++)
 	{
 		SelectToRight();
 	}
@@ -116,9 +121,10 @@ int main(int argc, char** argv)
 	{
 		SelectToLeft();
 	}
-	//gotopage(MAIN_PAGE);
+	gotopage(SECOND_PAGE);
+	device_icon(DEVICE_ONLINE);
 	int j = 0;
-	for (uint16_t i = 0; i < 0; i++)
+	for (uint16_t i = 0; i < 5; )
 	{
 		j = 0;
 		while (j++ < 51)

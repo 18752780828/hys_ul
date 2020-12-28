@@ -588,12 +588,6 @@
     <ClCompile Include="GUI_FONT\cizhi_kaiti.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lv_examples\lv_apps\hysteresis\line_chart.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lv_examples\lv_apps\hysteresis\table.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="lv_examples\lv_apps\hysteresis\hys_ui.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -622,6 +616,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI_FONT\kaiji_v2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\MeasurePage\line_chart.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\PlaybackPage\table.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\PlaybackPage\playback_main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\MeasurePage\measure_main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\FileManage\WriteRead.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\FileManage\DataProcess.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1100,13 +1112,25 @@
     <ClInclude Include="lv_examples\lv_tests\lv_test_objx\lv_test_cpicker\lv_test_cpicker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lv_examples\lv_apps\hysteresis\line_chart.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lv_examples\lv_apps\hysteresis\table.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="lv_examples\lv_apps\hysteresis\hys_ui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\MeasurePage\line_chart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\PlaybackPage\table.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\MeasurePage\measure_main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\PlaybackPage\playback_main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\FileManage\WriteRead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\FileManage\DataProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

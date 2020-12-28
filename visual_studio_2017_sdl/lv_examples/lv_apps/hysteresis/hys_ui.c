@@ -61,6 +61,7 @@ void createMainPage(float* hys_data_addr, float yMaxvalue, uint16_t point_cnt)
 	//ªÊ÷∆”“…œΩ«Õº±Í
 	draw_icon(chart_canvas);
 
+	//int a = min(8, 9);
 	/*************************/
 	//full_hys_data(&hys_chart, hys_data_addr);
 	//draw_hys_wave();

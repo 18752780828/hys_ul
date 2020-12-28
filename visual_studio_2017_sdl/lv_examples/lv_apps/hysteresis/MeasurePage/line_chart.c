@@ -4,7 +4,7 @@
  */
 
 #include "line_chart.h"
-#if LV_USE_DEMO
+#if 1
 #include "stdlib.h"
 
 #pragma execution_character_set("utf-8")
@@ -222,7 +222,7 @@ void init_hys_chart(line_chart* hys_wave)
 
 	//显示矫顽力初始值
 	label_hys = lv_label_create(hys_wave->canvas, hys_wave->y_label);
-	lv_obj_align(label_hys, hys_wave->canvas, LV_ALIGN_OUT_RIGHT_MID, -hys_wave->x_label_w - 10, -(1 * hys_wave->y_len / 5 - 50));
+	lv_obj_align(label_hys, hys_wave->canvas, LV_ALIGN_OUT_RIGHT_MID, -hys_wave->x_label_w + 20, -(1 * hys_wave->y_len / 5 - 50));
 	hysValueUpdate(0);
 
 	//绘制x刻度值
@@ -350,45 +350,7 @@ void hide_highlight_point(line_chart* hys_wave)
 	hysValueUpdate(0);
 }
 
-uint8_t* floatTochar(float hysteresis)
-{
-	static uint8_t str[8];
-	static uint8_t strPot[8] = { ".000" };
-	uint8_t i = 3;
-	uint32_t pot = hysteresis * 1000;
 
-	strcpy(str, numTochar(hysteresis));
-
-	for (; i > 0; i--)
-	{
-		strPot[i] = pot % 10 + '0';
-		pot /= 10;
-
-	}
-	strcat(str, strPot);
-	return str;
-}
-
-uint8_t* numTochar(uint32_t num)
-{
-	uint8_t str[10] = { 0 };
-	uint8_t str_new[10] = { 0 };
-	uint8_t i = 0;
-	uint8_t len = 0;
-	do
-	{
-		str[i++] = num % 10 + '0';
-		num /= 10;
-	} while (num > 0);
-	str[i] = '\0';
-	len = i;
-	for (i = 0; i < len; i++)
-	{
-		str_new[i] = str[len - i - 1];
-	}
-	str_new[i] = '\0';
-	return str_new;
-}
 
 void draw_icon(lv_obj_t* canvas)
 {
