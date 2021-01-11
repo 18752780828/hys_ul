@@ -53,7 +53,7 @@ typedef struct
 	uint16_t raw_end_index;
 	uint16_t raw_sel_index;
 
-}hys_table;
+}hysTable_t;
 
 void draw_table_frame(hys_table* hytable);
 void full_data(hys_table* hytable, line_chart* hys_wave);

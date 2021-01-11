@@ -636,6 +636,12 @@
     <ClCompile Include="lv_examples\lv_apps\hysteresis\FileManage\DataProcess.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\PlaybackPage\hysTable.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\MeasurePage\hysWaveform.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lvgl\lvgl.h">
@@ -1131,6 +1137,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lv_examples\lv_apps\hysteresis\FileManage\DataProcess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\UIErrorCode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\PlaybackPage\hysTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\MeasurePage\hysWaveform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

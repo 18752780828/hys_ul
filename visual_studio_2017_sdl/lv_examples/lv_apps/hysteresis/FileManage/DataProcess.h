@@ -11,5 +11,6 @@
 
 #define  RAW_DATA_LEN      500
 
-uint8_t* floatTochar(float floatData);
-uint8_t* numTochar(uint32_t num);
+char* floatTochar(float floatData, uint8_t dotNum);
+char* numTochar(uint32_t num);
+float getMaxValue(float* rawData, uint16_t num, uint16_t* maxIndex);

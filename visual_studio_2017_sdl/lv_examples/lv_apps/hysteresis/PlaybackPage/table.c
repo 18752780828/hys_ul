@@ -4,7 +4,7 @@
 */
 
 #include "table.h"
-#if LV_USE_DEMO
+
 #include "stdlib.h"
 
 #pragma execution_character_set("utf-8")
@@ -420,6 +420,6 @@ void table_data_up(hys_table* hytable, line_chart* hys_wave)
 
 }
 
-#endif  /*LV_USE_DEMO*/
+
 
 

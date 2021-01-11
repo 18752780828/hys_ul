@@ -273,8 +273,10 @@
     <ClCompile Include="lv_examples\lv_apps\hysteresis\FileManage\DataProcess.c" />
     <ClCompile Include="lv_examples\lv_apps\hysteresis\FileManage\WriteRead.c" />
     <ClCompile Include="lv_examples\lv_apps\hysteresis\hys_ui.c" />
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\MeasurePage\hysWaveform.c" />
     <ClCompile Include="lv_examples\lv_apps\hysteresis\MeasurePage\line_chart.c" />
     <ClCompile Include="lv_examples\lv_apps\hysteresis\MeasurePage\measure_main.c" />
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\PlaybackPage\hysTable.c" />
     <ClCompile Include="lv_examples\lv_apps\hysteresis\PlaybackPage\playback_main.c" />
     <ClCompile Include="lv_examples\lv_apps\hysteresis\PlaybackPage\table.c" />
     <ClCompile Include="lv_examples\lv_apps\sysmon\sysmon.c" />
@@ -449,10 +451,13 @@
     <ClInclude Include="lv_examples\lv_apps\hysteresis\FileManage\DataProcess.h" />
     <ClInclude Include="lv_examples\lv_apps\hysteresis\FileManage\WriteRead.h" />
     <ClInclude Include="lv_examples\lv_apps\hysteresis\hys_ui.h" />
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\MeasurePage\hysWaveform.h" />
     <ClInclude Include="lv_examples\lv_apps\hysteresis\MeasurePage\line_chart.h" />
     <ClInclude Include="lv_examples\lv_apps\hysteresis\MeasurePage\measure_main.h" />
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\PlaybackPage\hysTable.h" />
     <ClInclude Include="lv_examples\lv_apps\hysteresis\PlaybackPage\playback_main.h" />
     <ClInclude Include="lv_examples\lv_apps\hysteresis\PlaybackPage\table.h" />
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\UIErrorCode.h" />
     <ClInclude Include="lv_examples\lv_apps\sysmon\sysmon.h" />
     <ClInclude Include="lv_examples\lv_apps\terminal\terminal.h" />
     <ClInclude Include="lv_examples\lv_apps\tpcal\tpcal.h" />
