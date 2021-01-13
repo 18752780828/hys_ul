@@ -30,8 +30,6 @@
 #define  MAIN_PAGE     2
 #define  SECOND_PAGE   1
 
-#define  DEVICE_ONLINE    1
-#define  DEVICE_OUTLINE   0
 
 
 #ifdef __cplusplus

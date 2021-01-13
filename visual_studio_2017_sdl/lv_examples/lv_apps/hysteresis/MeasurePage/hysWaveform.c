@@ -22,16 +22,11 @@ LV_IMG_DECLARE(probe_outline);
 
 
 static void drawCoords(hysWaveform_t* hysWaveform);
-static float getRawData(hysWaveform_t* hysWaveform, uint16_t hys_index);
-static void addRawData(hysWaveform_t* hysWaveform, float hysRawValue);
-static void addRaxdataIndex(hysWaveform_t* hysWaveform);
-static void decRaxdataIndex(hysWaveform_t* hysWaveform);
-static shiftLift(hysWaveform_t* hysWaveform);
-static void setRawData(hysWaveform_t* hysWaveform, uint16_t hys_index, float hysRawValue);
+static void updateWavePoint(hysWaveform_t* hysWaveform);
+static void updatexLabel(hysWaveform_t* hysWaveform);
+static void updateValueJWL(hysWaveform_t* hysWaveform);
 
 
-static lv_obj_t* label_hys;
-static lv_point_t wave_data[RAW_DATA_LEN];
 static uint16_t y_max;
 static uint16_t x_max;
 static uint16_t y_min;
@@ -178,7 +173,7 @@ static void updatexLabel(hysWaveform_t* hysWaveform)
 	float xCoordSteplen = (x_max - x_min) * 1.0 / hysWaveform->xStepNum;
 	char str[10];
 
-	lv_canvas_draw_rect(hysWaveform->canvas, x_min - 10, y_max, x_max - x_min + 20, 20, &hysWaveform->style_frame);
+	lv_canvas_draw_rect(hysWaveform->canvas, x_min - 10, y_max, x_max - x_min + 20, 20, &hysWaveform->styleFrame);
 
 	while (xCoordSteplen * xLabelSteplen < 80)
 	{
@@ -201,10 +196,10 @@ static void updatexLabel(hysWaveform_t* hysWaveform)
 
 }
 
-static void updateValueJWL(hysWaveform_t* hysWaveform, float hysRawValue)
+static void updateValueJWL(hysWaveform_t* hysWaveform)
 {
 	char str[15];
-	strcpy(str, floatTochar(hysRawValue, 3));
+	strcpy(str, floatTochar(hysWaveform->rawData[hysWaveform->selIndex + hysWaveform->rawStartIndex], 3));
 	lv_label_set_text(hysWaveform->valueJWL, str);
 }
 
@@ -379,11 +374,15 @@ void hysWaveformCreate(hysWaveform_t* hysWaveform)
 
 void hysWaveformHighlightPoint(hysWaveform_t* hysWaveform, uint16_t pointIndex)
 {
+	if (pointIndex >= MAX_DIS_POINTS)
+	{
+		return;
+	}
 	hysWaveform->selIndex = pointIndex;
 	lv_obj_align(hysWaveform->selPoint, hysWaveform->lineDotWave,
 		LV_ALIGN_IN_TOP_LEFT,
-		hysWaveform->pointCoord[hysWaveform->selIndex].x - POINT_RADIUS,
-		hysWaveform->pointCoord[hysWaveform->selIndex].y - POINT_RADIUS);
+		hysWaveform->pointCoord[hysWaveform->selIndex + hysWaveform->rawStartIndex].x - POINT_RADIUS,
+		hysWaveform->pointCoord[hysWaveform->selIndex + hysWaveform->rawStartIndex].y - POINT_RADIUS);
 	lv_obj_set_hidden(hysWaveform->selPoint, false);
 
 }
@@ -396,7 +395,10 @@ void hysWaveformNormallightPoint(hysWaveform_t* hysWaveform)
 
 void hysWaveformFullData(hysWaveform_t* hysWaveform, float* hysRawData, uint16_t num)
 {
-
+	if (num > RAW_DATA_LEN)
+	{
+		return;
+	}
 	hysWaveform->rawDataNum = num;
 	hysWaveform->disPointNum = MIN(num, MAX_DIS_POINTS);
 	hysWaveform->xStepNum = MAX(hysWaveform->disPointNum, MIN_DIS_POINTS);
@@ -480,258 +482,81 @@ void hysWaveformAddPoint(hysWaveform_t* hysWaveform, float hysRawValue)
 			drawCoords(hysWaveform);
 		}
 	}
-	updateValueJWL(hysWaveform, hysRawValue);
+	hysWaveform->selIndex = hysWaveform->disPointNum - 1;
+	updateValueJWL(hysWaveform);
+	hysWaveformDrawWave(hysWaveform);
+}
+
+//pointIndex范围为0到（总点数-1），即0到（hysWaveform->points_num - 1）
+void hysWaveformRemovePoint(hysWaveform_t* hysWaveform, uint16_t pointIndex)
+{
+	if (!hysWaveform->rawDataNum || pointIndex > hysWaveform->rawEndIndex)
+	{
+		return;
+	}
+
+
+	for (uint16_t i = pointIndex; i < hysWaveform->rawEndIndex - 1; i++)
+	{
+		hysWaveform->rawData[i] = hysWaveform->rawData[i + 1];
+	}
+
+	hysWaveform->rawDataNum--;
+	hysWaveform->rawEndIndex--;
+
+	if (hysWaveform->rawDataNum >= MAX_DIS_POINTS)
+	{
+		for (uint16_t i = pointIndex; i < hysWaveform->rawEndIndex; i++)
+		{
+			hysWaveform->pointCoord[i].y = hysWaveform->pointCoord[i + 1].y;
+		}
+		hysWaveform->rawStartIndex--;
+		updatexLabel(hysWaveform);
+
+	}
+	else
+	{
+		hysWaveform->xStepNum = MAX(hysWaveform->rawDataNum, MIN_DIS_POINTS);
+		updateWavePoint(hysWaveform);
+		hysWaveform->selIndex = MIN(hysWaveform->selIndex, hysWaveform->rawEndIndex);
+		drawCoords(hysWaveform);
+	}
+
+	updateValueJWL(hysWaveform);
 	hysWaveformDrawWave(hysWaveform);
 }
 
 
-void xValueUpdate(hysWaveform_t* hysWaveform)
+void hysWaveformMoveToRL(hysWaveform_t* hysWaveform, uint8_t moveLeft)
 {
-
-	//绘制x刻度值
-	
-	float x, y;
-	uint8_t str[6];
-	uint16_t y_max = hysWaveform->y0_len + hysWaveform->y_label_h;
-	uint16_t x_max = hysWaveform->x_len + hysWaveform->xOffset + hysWaveform->x_off;
-	uint16_t x_min = hysWaveform->xOffset + hysWaveform->x_off;
-
-	/****************/
-	//hysWaveform->yStepNum = hysWaveform->rawDataMax;
-
-	/**************/
-
-	lv_canvas_draw_rect(hysWaveform->canvas, x_min, y_max + 5, hysWaveform->x_len + 17, hysWaveform->y0_off, &hysWaveform->styleFrame);
-
-	
-	float xStep = hysWaveform->x_len * 1.0 / hysWaveform->xStepNum;
-	uint8_t xdistans = 80 / xStep;
-	uint8_t xPoint = 1;
-	uint8_t xScaleValue_off = 5;
-	uint16_t pointValue = hysWaveform->start_piont;
-
-	if (xdistans == 0)
+	if (moveLeft)
 	{
-		xdistans = 1;
-	}
-	for (x = hysWaveform->x_off + hysWaveform->xOffset; x < x_max + 4; x += xStep)
-	{
-		//绘制横坐标刻度值
-		if (xPoint % xdistans == 0)
+		if (hysWaveform->rawEndIndex >= RAW_DATA_LEN)
 		{
-			xScaleValue_off = (pointValue > 9) ? ((pointValue > 99) ? 18 : 11) : 6;
-			strcpy(str, numTochar(pointValue));
-			lv_canvas_draw_text(hysWaveform->canvas, x - xScaleValue_off, y_max + 5, 36, &hysWaveform->styleFrame, str, LV_LABEL_ALIGN_LEFT);
+			return;
 		}
-		xPoint++;
-		pointValue++;
-	}
+		hysWaveform->rawEndIndex++;
+		hysWaveform->rawStartIndex++;
 
-}
-
-
-//num >= 1  and num <= hysWaveform->rel_points_num
-
-void show_highlight_point(hysWaveform_t* hysWaveform)
-{
-	//hysWaveform->styleSelPoint.body.opa = LV_OPA_70;
-	hysValueUpdate(getRawData(hysWaveform,hysWaveform->selIndex));
-}
-
-void hide_highlight_point(hysWaveform_t* hysWaveform)
-{
-	//hysWaveform->styleSelPoint.body.opa = LV_OPA_0;
-	lv_obj_set_hidden(hysWaveform->sel_point, true);
-	hysValueUpdate(0);
-}
-
-
-
-void draw_icon(lv_obj_t* canvas)
-{
-	//显示图标
-	static lv_style_t img_style;
-	lv_style_copy(&img_style, &lv_style_plain);
-	img_style.image.opa = LV_OPA_90;
-
-	img_style.body.main_color = LV_COLOR_BLACK;
-	img_style.body.grad_color = LV_COLOR_BLACK;
-	img_style.body.radius = 0;
-	img_style.body.border.width = 1;
-	img_style.body.border.color = LV_COLOR_BLACK;
-	img_style.body.shadow.color = LV_COLOR_BLACK;
-	img_style.body.shadow.width = 0;
-	img_style.line.width = 1;
-	img_style.line.color = LV_COLOR_BLACK;
-
-	//lv_canvas_draw_img(canvas, 384 * 1.666 + 30, 6, &warn_green, &img_style);
-	lv_canvas_draw_img(canvas, 700, 6, &probe_outline, &img_style);
-	lv_canvas_draw_img(canvas, 750, 9, &full_battery, &img_style);
-
-}
-
-
-
-static shiftLift(hysWaveform_t* hysWaveform)
-{
-	for (uint16_t i = 0; i < hysWaveform->rel_points_num; i++)
-	{
-		hysWaveform->point_data[i].y = hysWaveform->point_data[i + 1].y;
-	}
-
-}
-
-static void setRawData(hysWaveform_t* hysWaveform, uint16_t hys_index, float hysRawValue)
-{
-	uint16_t new_index = hysWaveform->raw_hdata_index + hys_index;
-	if (new_index >= RAW_DATA_LEN)
-	{
-		hysWaveform->raw_hysRawValue[new_index - RAW_DATA_LEN] = hysRawValue;
-	}
+	} 
 	else
 	{
-		hysWaveform->raw_hysRawValue[new_index] = hysRawValue;
-	}
-
-}
-
-static float getRawData(hysWaveform_t* hysWaveform, uint16_t hys_index)
-{
-	uint16_t new_index = hysWaveform->raw_hdata_index + hys_index;
-	if (new_index >= RAW_DATA_LEN)
-	{
-		return hysWaveform->raw_hysRawValue[new_index - RAW_DATA_LEN];
-	}
-	else
-	{
-		return hysWaveform->raw_hysRawValue[new_index];
-	}
-}
-
-static void addRawData(hysWaveform_t* hysWaveform, float hysRawValue)
-{
-	uint16_t new_index = hysWaveform->raw_hdata_index + hysWaveform->rel_points_num;
-	if (new_index >= RAW_DATA_LEN)
-	{
-		hysWaveform->raw_hysRawValue[new_index - RAW_DATA_LEN] = hysRawValue;
-	}
-	else
-	{
-		hysWaveform->raw_hysRawValue[new_index] = hysRawValue;
-	}
-}
-
-static void addRaxdataIndex(hysWaveform_t* hysWaveform)
-{
-	if (++hysWaveform->raw_hdata_index >= RAW_DATA_LEN)
-	{
-		hysWaveform->raw_hdata_index = 0;
-	}
-
-}
-
-static void decRaxdataIndex(hysWaveform_t* hysWaveform)
-{
-	if (hysWaveform->raw_hdata_index) 
-	{
-		hysWaveform->raw_hdata_index--;
-	}
-	else
-	{
-		hysWaveform->raw_hdata_index = RAW_DATA_LEN - 1;
-	}
-
-}
-
-void resetRaxdataIndex(hysWaveform_t* hysWaveform)
-{
-	hysWaveform->raw_hdata_index = 0;
-}
-
-//point_dex范围为0到（总点数-1），即0到（hysWaveform->points_num - 1）
-void removePoint(hysWaveform_t* hysWaveform, uint16_t point_dex)
-{
-	for (uint16_t i = point_dex; i < hysWaveform->record_points_num - 1; i++)
-	{
-		//setRawData(hysWaveform, i, getRawData(hysWaveform, i + 1));
-		hysWaveform->raw_hysRawValue[i] = hysWaveform->raw_hysRawValue[i + 1];
-	}
-	hysWaveform->record_points_num--;
-	
-
-	if (hysWaveform->record_points_num >= MAX_DIS_POINTS)
-	{
-		//if (MAX_DIS_POINTS == hysWaveform->record_points_num)
-		//{
-		//	//hysWaveform->start_piont--;
-		//	//decRaxdataIndex(hysWaveform);
-		//}
-		uint16_t end_point = hysWaveform->start_piont + MAX_DIS_POINTS - 1;
-
-		if (end_point <= hysWaveform->record_points_num)
+		if (hysWaveform->rawStartIndex)
 		{
-			
-			for (uint16_t i = hysWaveform->selIndex; i < MAX_DIS_POINTS - 1; i++)
-			{
-				hysWaveform->point_data[i].y = hysWaveform->point_data[i + 1].y;
-			}
-			float yMult = 1.0 * hysWaveform->y_len / hysWaveform->rawDataMax;
-			hysWaveform->point_data[MAX_DIS_POINTS - 1].y = hysWaveform->y_len - getRawData(hysWaveform, MAX_DIS_POINTS - 1) * yMult;
-			
-
-		} 
-		else
-		{
-			for (uint16_t i = hysWaveform->selIndex; i > 0; i--)
-			{
-				hysWaveform->point_data[i].y = hysWaveform->point_data[i - 1].y;
-			}
-			float yMult = 1.0 * hysWaveform->y_len / hysWaveform->rawDataMax;
-			decRaxdataIndex(hysWaveform);
-			hysWaveform->point_data[0].y = hysWaveform->y_len - getRawData(hysWaveform, 0) * yMult;
-			hysWaveform->start_piont--;
+			return;
 		}
-		
-		return;
+		hysWaveform->rawEndIndex--;
+		hysWaveform->rawStartIndex--;
 
 	}
-	 if (hysWaveform->points_num > MIN_DIS_POINTS)
-	{
-		hysWaveform->points_num--;
-		hysWaveform->xStepNum = hysWaveform->points_num - 1;
-		draw_axis(hysWaveform);
-
-	}
-	
-	hysWaveform->rel_points_num--;
-	full_hysRawValue(hysWaveform, hysWaveform->raw_hysRawValue);
-	//draw_wave(hysWaveform);
-}
-
-void draw_point(hysWaveform_t* hysWaveform, uint16_t num)
-{
-	uint16_t add_point_index = num - 1;
-	lv_obj_align(hysWaveform->allPoint[add_point_index], hysWaveform->lineDotWave,
-		LV_ALIGN_IN_TOP_LEFT,
-		hysWaveform->point_data[add_point_index].x - POINT_RADIUS,
-		hysWaveform->point_data[add_point_index].y - POINT_RADIUS);
-	lv_obj_set_hidden(hysWaveform->allPoint[add_point_index], false);
-}
-
-void erase_point(hysWaveform_t* hysWaveform, uint16_t num)
-{
-	lv_obj_set_hidden(hysWaveform->allPoint[num - 1], true);
-}
-
-void waveToRight(hysWaveform_t* hysWaveform, float hysRawValue)
-{
-	for (int i = hysWaveform->rel_points_num - 1;  i > 0; i--)
-	{
-		hysWaveform->point_data[i].y = hysWaveform->point_data[i - 1].y;
-	}
-	float yMult = 1.0 * hysWaveform->y_len / hysWaveform->rawDataMax;
-	decRaxdataIndex(hysWaveform);
-	hysWaveform->point_data[0].y = hysWaveform->y_len - hysRawValue * yMult;
+	updatexLabel(hysWaveform);
+	updateValueJWL(hysWaveform);
+	hysWaveformDrawWave(hysWaveform);
 
 }
+
+
+
+
+
 

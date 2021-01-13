@@ -618,12 +618,6 @@
     <ClCompile Include="GUI_FONT\kaiji_v2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lv_examples\lv_apps\hysteresis\MeasurePage\line_chart.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lv_examples\lv_apps\hysteresis\PlaybackPage\table.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="lv_examples\lv_apps\hysteresis\PlaybackPage\playback_main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -640,6 +634,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lv_examples\lv_apps\hysteresis\MeasurePage\hysWaveform.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\StatusBar\StatusBar.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1121,12 +1118,6 @@
     <ClInclude Include="lv_examples\lv_apps\hysteresis\hys_ui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lv_examples\lv_apps\hysteresis\MeasurePage\line_chart.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lv_examples\lv_apps\hysteresis\PlaybackPage\table.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="lv_examples\lv_apps\hysteresis\MeasurePage\measure_main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1146,6 +1137,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lv_examples\lv_apps\hysteresis\MeasurePage\hysWaveform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\StatusBar\StatusBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

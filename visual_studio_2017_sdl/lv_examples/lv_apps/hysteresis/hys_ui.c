@@ -307,67 +307,6 @@ void gotopage(uint8_t page)
 	currentPage = page;
 }
 
-void runCurrentPage(void)
-{
-	if (currentPage == MAIN_PAGE)
-	{
-
-	} 
-	else if (currentPage == SECOND_PAGE)
-	{
-
-	}
-
-}
-
-void device_icon(uint8_t dev_state)
-{
-	//显示图标
-	static lv_style_t img_style;
-	lv_style_copy(&img_style, &lv_style_plain);
-	img_style.image.opa = LV_OPA_90;
-
-	if (dev_state == DEVICE_ONLINE)
-	{
-		lv_canvas_draw_img(chart_canvas, 700, 6, &probe_online, &img_style);
-	} 
-	else if (dev_state == DEVICE_OUTLINE)
-	{
-		lv_canvas_draw_img(chart_canvas, 700, 6, &probe_outline, &img_style);
-
-	}
-}
-
-void set_bat_level(uint8_t lev)
-{
-	//显示图标
-	static lv_style_t img_style;
-	lv_style_copy(&img_style, &lv_style_plain);
-	img_style.image.opa = LV_OPA_90;
-
-	img_style.body.main_color = LV_COLOR_BLACK;
-	img_style.body.grad_color = LV_COLOR_BLACK;
-	img_style.body.radius = 0;
-	img_style.body.border.width = 1;
-	img_style.body.border.color = LV_COLOR_BLACK;
-	img_style.body.shadow.color = LV_COLOR_BLACK;
-	img_style.body.shadow.width = 0;
-	img_style.line.width = 1;
-	img_style.line.color = LV_COLOR_BLACK;
-
-	if (lev > 100)
-	{
-		lev = 100;
-	}
-
-	lev = 23 - lev * 23.0 / 100;
-
-	lv_canvas_draw_img(chart_canvas, 750, 9, &full_battery, &img_style);
-	lv_canvas_draw_rect(chart_canvas, 756, 19, lev, 12, &img_style);
-
-}
-
-
 void SelectToRight()
 {
 	if (hys_chart.rel_points_num == 0)
@@ -502,6 +441,7 @@ uint8_t delete_message(void)
 
 	return 1;
 }
+
 void bootAnimation(void)
 {
 	boot_img = lv_img_create(lv_scr_act(), NULL);
@@ -518,6 +458,7 @@ void bootAnimation(void)
 	//lv_obj_clean(icon);
 	//
 }
+
 void remove_boot_img()
 {
 	lv_obj_del(boot_img);

@@ -121,8 +121,7 @@ void hysWaveformFullData(hysWaveform_t* hysWaveform, float* hysRawData, uint16_t
 void hysWaveformDrawWave(hysWaveform_t* hysWaveform);
 void hysWaveformAddPoint(hysWaveform_t* hysWaveform, float hysRawValue);
 void hysWaveformRemovePoint(hysWaveform_t* hysWaveform, uint16_t pointIndex);
-void hysWaveformMoveRight(hysWaveform_t* hysWaveform);
-void hysWaveformMoveLeft(hysWaveform_t* hysWaveform);
+void hysWaveformMoveToRL(hysWaveform_t* hysWaveform, uint8_t moveLeft);
 
 //void hysWaveformxValueUpdate(line_chart* hys_wave);
 //void hysWaveforminit_hys_chart(line_chart* hys_wave);
