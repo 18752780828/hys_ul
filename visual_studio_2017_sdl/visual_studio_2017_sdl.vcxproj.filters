@@ -639,6 +639,9 @@
     <ClCompile Include="lv_examples\lv_apps\hysteresis\StatusBar\StatusBar.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\keyScan.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lvgl\lvgl.h">
@@ -1140,6 +1143,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lv_examples\lv_apps\hysteresis\StatusBar\StatusBar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\keyScan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

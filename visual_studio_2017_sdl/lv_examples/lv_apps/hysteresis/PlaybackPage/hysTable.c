@@ -43,14 +43,14 @@ static const uint8_t* getCellString(hysTable_t* hysTable, uint16_t cellIndex)
 
 }
 
-void hysTableFrameDraw(hysTable_t* hysTable)
+void hysTableDeInit(hysTable_t* hysTable)
 {
 	/**************仿真参数 start *************/
 	hysTable->borderTop = 5;
 	hysTable->borderBottom = 15;
 	hysTable->borderLeft = 20;
 	hysTable->borderRight = 20;
-	hysTable->canvasHight = LV_VER_RES_MAX;
+	hysTable->canvasHight = LV_VER_RES_MAX / 2;
 	hysTable->canvasWidth = LV_HOR_RES_MAX;
 	hysTable->selIndex = 0;
 
@@ -62,9 +62,15 @@ void hysTableFrameDraw(hysTable_t* hysTable)
 	hysTable->rawEndIndex = 0;
 	hysTable->rawDataNum = 0;;
 	hysTable->rawData = NULL;
-
+	hysTable->playBackID = 0;
 
 	/**************仿真参数 stop *************/
+
+}
+
+void hysTableCreate(hysTable_t* hysTable, float* hysRawData)
+{
+	hysTable->rawData = hysRawData;
 
 	/*Create a normal cell style*/
 	lv_style_copy(&hysTable->styleTableCell, &lv_style_plain);
@@ -143,11 +149,12 @@ void hysTableFrameDraw(hysTable_t* hysTable)
 
 }
 
-void hysTableFullData(hysTable_t* hysTable, float* hysRawData)
+void hysTableFullData(hysTable_t* hysTable, uint16_t rawDataNum)
 {
 	uint16_t i = hysTable->rawStartIndex;
 	uint8_t str[8];
 
+	hysTable->rawDataNum = rawDataNum;
 
 	for (uint16_t row = 1; row < TABLE_DATA_ROW + 1; row++)
 	{
@@ -195,7 +202,7 @@ void hysTableRemoveCell(hysTable_t* hysTable, uint16_t cellIndex)
 			hysTable->selIndex += TABLE_DATA_COL;
 		}
 	}
-	hysTableFullData(hysTable, hysTable->rawData);
+	hysTableFullData(hysTable, hysTable->rawDataNum);
 }
 
 void hysTableHighlightCell(hysTable_t* hysTable, uint16_t cellIndex)
@@ -299,5 +306,8 @@ void hysTableMovedown(hysTable_t* hysTable)
 	}
 }
 
-
+void hysTableErase(hysTable_t* hysTable)
+{
+	lv_obj_del(hysTable->table);
+}
 

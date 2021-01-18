@@ -18,9 +18,6 @@ extern "C" {
 #include "../../../../lv_ex_conf.h"
 #endif
 
-#if LV_USE_LINE_CHART
-
-#endif /*LV_USE_DEMO*/
 
 #ifdef __cplusplus
 } /* extern "C" */
@@ -31,11 +28,15 @@ extern "C" {
 #define  MIN_DIS_POINTS    10
 #define  MAX_DIS_POINTS    20
 
+#define  FULL_SCREEN    0x00
+#define  HALF_SCREEN    0x01
+
 //¶¨Òåµã°ë¾¶
 #define  POINT_RADIUS     7
 
 //gun extern C
-//#define min(x, y) ({int a = x; int b = y; (a > b) ? b : a;})
+//#define MIN(x, y) ({int a = x; int b = y; (a > b) ? b : a;})
+//#define MAX(x, y) ({int a = x; int b = y; (a > b) ? a : b;})
 
 //a , 
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
@@ -48,9 +49,6 @@ typedef struct
 
 	uint16_t canvasWidth;
 	uint16_t canvasHight;
-
-	//uint16_t formWidth;
-	//uint16_t formHigth;
 
 	uint8_t xStepNum;
 	uint8_t yStepNum;
@@ -70,12 +68,6 @@ typedef struct
 
 	uint8_t xOffset;
 	uint8_t yOffset;
-
-	//uint8_t xTitleHigth;
-	//uint8_t yTitleHigth;
-
-	//uint8_t xLabelHigth;
-	//uint8_t yLabelWidth;
 
 	uint16_t selIndex;
 	uint16_t disPointNum;
@@ -113,25 +105,18 @@ typedef struct
 
 }hysWaveform_t;
 
-void deInitWaveform(hysWaveform_t* hysWaveform);
-void hysWaveformCreate(hysWaveform_t* hysWaveform);
+void hysWaveformDeInit(hysWaveform_t* hysWaveform);
+void hysWaveformCreate(hysWaveform_t* hysWaveform, float* hysRawData);
 void hysWaveformHighlightPoint(hysWaveform_t* hysWaveform, uint16_t pointIndex);
 void hysWaveformNormallightPoint(hysWaveform_t* hysWaveform);
+void hysWaveformSetRawdataSrc(hysWaveform_t* hysWaveform, float* hysRawData);
 void hysWaveformFullData(hysWaveform_t* hysWaveform, float* hysRawData, uint16_t num);
 void hysWaveformDrawWave(hysWaveform_t* hysWaveform);
 void hysWaveformAddPoint(hysWaveform_t* hysWaveform, float hysRawValue);
 void hysWaveformRemovePoint(hysWaveform_t* hysWaveform, uint16_t pointIndex);
 void hysWaveformMoveToRL(hysWaveform_t* hysWaveform, uint8_t moveLeft);
+void hysWaveformSetType(hysWaveform_t* hysWaveform, uint8_t sizeType);
+void hysWaveformErase(hysWaveform_t* hysWaveform);
 
-//void hysWaveformxValueUpdate(line_chart* hys_wave);
-//void hysWaveforminit_hys_chart(line_chart* hys_wave);
-//void hysWaveformdraw_frame2(line_chart* hys_wave);
-//void hysWaveformdeinit_hys_chart(line_chart* hys_wave);
-//void hysWaveformhysValueUpdate(float hysteresis);
-//void hysWaveformset_highlight_point(line_chart* hys_wave, uint16_t pointIndex);
-//void draw_icon(lv_obj_t* canvas);
-//void hysWaveformresetRaxdataIndex(line_chart* hys_wave);
-//void hysWaveformdraw_point(line_chart* hys_wave, uint16_t num);
-//void hysWaveformerase_point(line_chart* hys_wave, uint16_t num);
 
 #endif /*DEMO_H*/

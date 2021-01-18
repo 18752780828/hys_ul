@@ -203,7 +203,7 @@ static void updateValueJWL(hysWaveform_t* hysWaveform)
 	lv_label_set_text(hysWaveform->valueJWL, str);
 }
 
-void deInitWaveform(hysWaveform_t* hysWaveform)
+void hysWaveformDeInit(hysWaveform_t* hysWaveform)
 {
 
 	//Ä¬ÈÏ²ÎÊý
@@ -290,12 +290,14 @@ void deInitWaveform(hysWaveform_t* hysWaveform)
 
 }
 
-void hysWaveformCreate(hysWaveform_t* hysWaveform)
+void hysWaveformCreate(hysWaveform_t* hysWaveform, float* hysRawData)
 {
 	y_max = hysWaveform->startCoordY + hysWaveform->canvasHight - hysWaveform->borderBottom - hysWaveform->yOffset;
 	y_min = hysWaveform->startCoordY + hysWaveform->borderTop + hysWaveform->yArrowLen;
 	x_max = hysWaveform->startCoordX + hysWaveform->canvasWidth - hysWaveform->borderRight - hysWaveform->xArrowLen;
 	x_min = hysWaveform->startCoordX + hysWaveform->borderLeft + hysWaveform->xOffset;
+
+	hysWaveform->rawData = hysRawData;
 
 	hysWaveform->canvas = lv_canvas_create(lv_scr_act(), NULL);
 	lv_canvas_set_buffer(hysWaveform->canvas, hysWaveform->colorBuf, hysWaveform->canvasWidth, hysWaveform->canvasHight, LV_IMG_CF_TRUE_COLOR);
@@ -392,6 +394,10 @@ void hysWaveformNormallightPoint(hysWaveform_t* hysWaveform)
 	lv_obj_set_hidden(hysWaveform->selPoint, true);
 }
 
+void hysWaveformSetRawdataSrc(hysWaveform_t* hysWaveform, float* hysRawData)
+{
+	hysWaveform->rawData = hysRawData;
+}
 
 void hysWaveformFullData(hysWaveform_t* hysWaveform, float* hysRawData, uint16_t num)
 {
@@ -526,7 +532,6 @@ void hysWaveformRemovePoint(hysWaveform_t* hysWaveform, uint16_t pointIndex)
 	hysWaveformDrawWave(hysWaveform);
 }
 
-
 void hysWaveformMoveToRL(hysWaveform_t* hysWaveform, uint8_t moveLeft)
 {
 	if (moveLeft)
@@ -555,6 +560,23 @@ void hysWaveformMoveToRL(hysWaveform_t* hysWaveform, uint8_t moveLeft)
 
 }
 
+void hysWaveformSetType(hysWaveform_t* hysWaveform, uint8_t sizeType)
+{
+	if (sizeType == FULL_SCREEN)
+	{
+		//hysWaveform->canvasWidth = LV_HOR_RES_MAX;
+		hysWaveform->canvasHight = LV_VER_RES_MAX;
+	}
+	else if (sizeType == HALF_SCREEN)
+	{
+		hysWaveform->canvasHight = LV_VER_RES_MAX / 2;
+	}
+}
+
+void hysWaveformErase(hysWaveform_t* hysWaveform)
+{
+	lv_obj_del(hysWaveform->canvas);
+}
 
 
 

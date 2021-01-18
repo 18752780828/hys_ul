@@ -23,8 +23,8 @@ void statusBarInit(lv_obj_t* canvas)
 	img_style.line.width = 1;
 	img_style.line.color = LV_COLOR_BLACK;
 
-	lv_canvas_draw_img(canvas, 700, 6, &probe_outline, &img_style);
-	lv_canvas_draw_img(canvas, 750, 9, &full_battery, &img_style);
+	lv_canvas_draw_img(canvas, LV_HOR_RES_MAX - 100, 6, &probe_outline, &img_style);
+	lv_canvas_draw_img(canvas, LV_HOR_RES_MAX - 50, 9, &full_battery, &img_style);
 
 }
 

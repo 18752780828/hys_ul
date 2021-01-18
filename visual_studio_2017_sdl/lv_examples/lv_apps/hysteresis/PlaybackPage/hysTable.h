@@ -43,7 +43,7 @@ typedef struct
 	uint16_t rawStartIndex;
 	uint16_t rawEndIndex;
 	uint16_t rawDataNum;
-
+	uint16_t playBackID;
 	float* rawData;
 
 	lv_style_t styleFrame;
@@ -55,12 +55,14 @@ typedef struct
 
 }hysTable_t;
 
-void hysTableFrameDraw(hysTable_t* hysTable);
-void hysTableFullData(hysTable_t* hysTable, float* hysRawData);
+void hysTableDeInit(hysTable_t* hysTable);
+void hysTableCreate(hysTable_t* hysTable, float* hysRawData);
+void hysTableFullData(hysTable_t* hysTable, uint16_t rawDataNum);
 void hysTableRemoveCell(hysTable_t* hysTable, uint16_t cellIndex);
 void hysTableHighlightCell(hysTable_t* hysTable, uint16_t cellIndex);
 void hysTableNormallighCell(hysTable_t* hysTable, uint16_t cellIndex);
 void hysTableMovedown(hysTable_t* hysTable);
 void hysTableMoveup(hysTable_t* hysTable);
+void hysTableErase(hysTable_t* hysTable);
 
 #endif 
