@@ -537,9 +537,6 @@
     <ClCompile Include="GUI_FONT\usb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUI_FONT\wenquanyi24.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GUI_FONT\wifi.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -576,9 +573,6 @@
     <ClCompile Include="GUI_FONT\dog.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUI_FONT\warn_red.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GUI_FONT\warn_yellow.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -588,13 +582,7 @@
     <ClCompile Include="GUI_FONT\cizhi_kaiti.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lv_examples\lv_apps\hysteresis\hys_ui.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GUI_FONT\cizhi_kaiti_18.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI_FONT\warn_green.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI_FONT\cizhi_kaiti_30.c">
@@ -613,9 +601,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI_FONT\kaiji.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI_FONT\kaiji_v2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lv_examples\lv_apps\hysteresis\PlaybackPage\playback_main.c">
@@ -640,6 +625,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lv_examples\lv_apps\hysteresis\keyScan.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\MainPage\mainView.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lv_examples\lv_apps\hysteresis\MainPage\mainCtrl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI_FONT\wallPaper.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI_FONT\measBtnImg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1118,9 +1115,6 @@
     <ClInclude Include="lv_examples\lv_tests\lv_test_objx\lv_test_cpicker\lv_test_cpicker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lv_examples\lv_apps\hysteresis\hys_ui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="lv_examples\lv_apps\hysteresis\MeasurePage\measure_main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1133,9 +1127,6 @@
     <ClInclude Include="lv_examples\lv_apps\hysteresis\FileManage\DataProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lv_examples\lv_apps\hysteresis\UIErrorCode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="lv_examples\lv_apps\hysteresis\PlaybackPage\hysTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1146,6 +1137,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lv_examples\lv_apps\hysteresis\keyScan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\MainPage\mainView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lv_examples\lv_apps\hysteresis\hysteresisUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,7 +8,7 @@ LV_IMG_DECLARE(eth);
 LV_IMG_DECLARE(usb);
 LV_IMG_DECLARE(wifi);
 LV_IMG_DECLARE(battery);
-LV_FONT_DECLARE(wenquanyi24);
+
 LV_FONT_DECLARE(yahei13);
 LV_FONT_DECLARE(yahei15);
 LV_FONT_DECLARE(yaheiscan15);
@@ -323,7 +323,7 @@ void main_task1()
 
 	static lv_style_t style9;                                   //²âºñÊýÖµ
 	lv_style_copy(&style9, &lv_style_scr);
-	style9.text.font = &wenquanyi24;
+	
 	style9.text.color = LV_COLOR_WHITE;
 	lv_obj_t * label9 = lv_label_create(lv_scr_act(), NULL);
 	lv_label_set_text(label9, u8"99.99");

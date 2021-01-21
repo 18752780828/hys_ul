@@ -15,8 +15,6 @@ LV_FONT_DECLARE(cizhi_kaiti_36);
 LV_IMG_DECLARE(full_battery);
 LV_IMG_DECLARE(battery);
 LV_IMG_DECLARE(dog);
-LV_IMG_DECLARE(warn_red);
-LV_IMG_DECLARE(warn_green);
 LV_IMG_DECLARE(probe_online);
 LV_IMG_DECLARE(probe_outline);
 
@@ -68,25 +66,25 @@ static void drawCoords(hysWaveform_t* hysWaveform)
 			lv_canvas_draw_line(hysWaveform->canvas, linePoint, 2, &hysWaveform->styleFrame);
 		}
 		//绘制纵坐标刻度值
-		strcpy(str, floatTochar(yValue, 1));
-		lv_canvas_draw_text(hysWaveform->canvas, x_min - hysWaveform->xOffset, y - 12, 33, &hysWaveform->styleFrame, str, LV_LABEL_ALIGN_RIGHT);
+		strcpy(str, floatTochar(yValue, 0));//x_min - hysWaveform->xOffset
+		lv_canvas_draw_text(hysWaveform->canvas, 0, y - 12, 33, &hysWaveform->styleFrame, str, LV_LABEL_ALIGN_RIGHT);
 	}
 
-	lv_canvas_draw_text(hysWaveform->canvas, x_min - hysWaveform->xOffset, y_max - 12, 33, &hysWaveform->styleFrame, "0", LV_LABEL_ALIGN_RIGHT);
+	lv_canvas_draw_text(hysWaveform->canvas, 0, y_max - 12, 33, &hysWaveform->styleFrame, "0", LV_LABEL_ALIGN_RIGHT);
 
 	//画虚竖线
 	uint8_t xLabelOffset = 5;
 	uint8_t xLabelSteplen = 1;
 	uint8_t xStepCnt = 0;
 	uint16_t pointCnt = hysWaveform->rawStartIndex + 1;
-	float xCoordSteplen = (x_max - x_min) * 1.0 / hysWaveform->xStepNum;
+	float xCoordSteplen = (x_max - x_min) * 1.0 / (hysWaveform->xStepNum - 1);
 
 	while (xCoordSteplen * xLabelSteplen < 80)
 	{
 		xLabelSteplen++;
 	}
 
-	for (float x = x_min; x < x_max; x += xCoordSteplen)
+	for (float x = x_min; x < x_max + 3; x += xCoordSteplen)
 	{
 		for (float y = y_min; y < y_max; y = y + 2)
 		{
@@ -211,19 +209,19 @@ void hysWaveformDeInit(hysWaveform_t* hysWaveform)
 	hysWaveform->xStepNum = 20;
 	hysWaveform->yStepNum = 10;
 
-	hysWaveform->xOffset = 40;
+	hysWaveform->xOffset = 20;
 	hysWaveform->yOffset = 0;
-	hysWaveform->borderLeft = 30;
-	hysWaveform->borderRight = 80;
-	hysWaveform->borderTop = 60;
-	hysWaveform->borderBottom = 40;
+	hysWaveform->borderLeft = 40;
+	hysWaveform->borderRight = 120;
+	hysWaveform->borderTop = 50;
+	hysWaveform->borderBottom = 50;
 
 	hysWaveform->xArrowHalfWidth = 8;
-	hysWaveform->xArrowLen = 15;
+	hysWaveform->xArrowLen = 25;
 	hysWaveform->xArrowHigth = 10;
 
 	hysWaveform->yArrowHalfWidth = 8;
-	hysWaveform->yArrowLen = 15;
+	hysWaveform->yArrowLen = 25;
 	hysWaveform->yArrowHigth = 10;
 
 	hysWaveform->startCoordX = 0;
@@ -240,6 +238,7 @@ void hysWaveformDeInit(hysWaveform_t* hysWaveform)
 
 	hysWaveform->rawDataMax = 0;
 	hysWaveform->rawData = NULL;
+	hysWaveform->rawDataMax = 18;
 
 	lv_style_copy(&(hysWaveform->styleFrame), &lv_style_plain);
 	hysWaveform->styleFrame.body.main_color = LV_COLOR_BLACK;
@@ -259,6 +258,7 @@ void hysWaveformDeInit(hysWaveform_t* hysWaveform)
 	hysWaveform->styleTilleJWL.text.color = LV_COLOR_WHITE;
 
 	lv_style_copy(&(hysWaveform->styleLabelXY), &lv_style_scr);
+
 	lv_style_copy(&(hysWaveform->styleTitleX), &lv_style_scr);
 	hysWaveform->styleTitleX.text.font = &cizhi_kaiti_30;
 	hysWaveform->styleTitleX.text.color = LV_COLOR_WHITE;
@@ -266,7 +266,8 @@ void hysWaveformDeInit(hysWaveform_t* hysWaveform)
 	lv_style_copy(&(hysWaveform->styleTitleY), &(hysWaveform->styleTitleX));
 
 	lv_style_copy(&(hysWaveform->styleUnitJWL), &lv_style_scr);
-	lv_style_copy(&(hysWaveform->styleValueJWL), &lv_style_scr);
+
+	lv_style_copy(&(hysWaveform->styleValueJWL), &(hysWaveform->styleTitleX));
 
 	//设置波形折线属性
 	lv_style_copy(&hysWaveform->styleWave, &lv_style_plain);
@@ -358,19 +359,27 @@ void hysWaveformCreate(hysWaveform_t* hysWaveform, float* hysRawData)
 	hysWaveform->xTitle = lv_label_create(hysWaveform->canvas, NULL);
 	lv_label_set_text(hysWaveform->xTitle, u8"测量次数");
 	lv_obj_align(hysWaveform->xTitle, hysWaveform->canvas, LV_ALIGN_IN_BOTTOM_RIGHT, - hysWaveform->borderRight - hysWaveform->xArrowHigth,
-		-hysWaveform->borderBottom + hysWaveform->xArrowHalfWidth);     
+	-hysWaveform->borderBottom + hysWaveform->xArrowHalfWidth + 23);
 	lv_obj_set_style(hysWaveform->xTitle, &(hysWaveform->styleTitleX));
 
 	//显示矫顽力（A/cm）
 	hysWaveform->yTitle = lv_label_create(hysWaveform->canvas, hysWaveform->xTitle);
 	lv_label_set_text(hysWaveform->yTitle, u8"矫顽力(A/cm)");
-	lv_obj_align(hysWaveform->yTitle, hysWaveform->canvas, LV_ALIGN_IN_TOP_LEFT, hysWaveform->borderLeft, hysWaveform->borderTop);
+	lv_obj_align(hysWaveform->yTitle, hysWaveform->canvas, LV_ALIGN_IN_TOP_LEFT, hysWaveform->borderLeft, 20);
 	lv_obj_set_style(hysWaveform->yTitle, &(hysWaveform->styleTitleY));
+
+	//显示矫顽力值
+	hysWaveform->valueJWL = lv_label_create(hysWaveform->canvas, hysWaveform->xTitle);
+	lv_label_set_text(hysWaveform->valueJWL, u8"0.0");
+	lv_obj_align(hysWaveform->valueJWL, hysWaveform->tilleJWL, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
+	lv_obj_set_style(hysWaveform->valueJWL, &(hysWaveform->styleValueJWL));
+	//updateValueJWL(hysWaveform);
+
 
 	//A/cm
 	hysWaveform->unitJWL = lv_label_create(hysWaveform->canvas, hysWaveform->xTitle);
 	lv_label_set_text(hysWaveform->unitJWL, u8"A/cm");
-	lv_obj_align(hysWaveform->unitJWL, hysWaveform->tilleJWL, LV_ALIGN_OUT_RIGHT_BOTTOM, -10, -10);
+	lv_obj_align(hysWaveform->unitJWL, hysWaveform->valueJWL, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
 
 }
 

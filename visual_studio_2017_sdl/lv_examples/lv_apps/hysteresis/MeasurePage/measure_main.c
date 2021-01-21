@@ -46,6 +46,9 @@ void startMeasure()
 		default:
 			break;
 		}
+		lv_tick_inc(1);
+		lv_task_handler();
+
 
 	}
 }

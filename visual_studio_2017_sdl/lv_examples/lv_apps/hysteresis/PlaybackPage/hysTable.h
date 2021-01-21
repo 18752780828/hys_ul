@@ -63,6 +63,7 @@ void hysTableHighlightCell(hysTable_t* hysTable, uint16_t cellIndex);
 void hysTableNormallighCell(hysTable_t* hysTable, uint16_t cellIndex);
 void hysTableMovedown(hysTable_t* hysTable);
 void hysTableMoveup(hysTable_t* hysTable);
+void hysTableSelRL(hysTable_t* hysTable, uint8_t moveLeft);
 void hysTableErase(hysTable_t* hysTable);
 
 #endif 

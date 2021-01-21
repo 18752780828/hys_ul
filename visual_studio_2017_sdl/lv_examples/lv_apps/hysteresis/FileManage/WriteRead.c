@@ -1,12 +1,22 @@
 
 #include "WriteRead.h"
 
-void saveMeasureDate(float* hysRawData,uint16_t rawDataLen, uint16_t fileID)
+void saveMeasureDate(float* hysRawData,uint16_t rawDataLen, char* fileName)
 {
 
 }
 
-void readMeasureDate(float* hysRawData, uint16_t* rawDataLen, uint16_t fileID)
+void readMeasureDate(float* hysRawData, uint16_t* rawDataLen, char* fileName)
+{
+
+}
+
+uint16_t getRecordFileNum()
+{
+
+}
+
+void getNextFileName(char* fileName)
 {
 
 }

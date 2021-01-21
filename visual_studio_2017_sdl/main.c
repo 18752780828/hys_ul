@@ -13,10 +13,8 @@
 #include "lv_drivers/display/monitor.h"
 #include "lv_drivers/indev/mouse.h"
 #include "lv_drivers/indev/keyboard.h"
-#include "lv_examples/lv_apps/demo/demo.h"
-#include "lv_examples/lv_apps/hysteresis/line_chart.h"
-#include "lv_examples/lv_apps/hysteresis/table.h"
-#include "lv_examples/lv_apps/hysteresis/hys_ui.h"
+//#include "lv_examples/lv_apps/demo/demo.h"
+#include "lv_examples/lv_apps/hysteresis/MainPage/mainView.h"
 
 #include "lv_examples/lv_apps/benchmark/benchmark.h"
 #include "lv_examples/lv_tests/lv_test_theme/lv_test_theme_1.h"
@@ -53,10 +51,10 @@ static lv_indev_t * kb_indev;
 *   GLOBAL FUNCTIONS
 **********************/
 #pragma execution_character_set("utf-8")
-extern lv_obj_t * line1;
-float hys_data_buf[RAW_DATA_LEN];
 
-
+/*
+hysValueUpdate，该符号在函数 mainPage 
+*/
 int main(int argc, char** argv)
 {
     /*Initialize LittlevGL*/
@@ -67,176 +65,114 @@ int main(int argc, char** argv)
 
     lv_test_theme_1(lv_theme_alien_init(210, NULL));
 
-	/**************仿真参数 start *************/
-
-	uint16_t yValueMax = 18;
-	uint16_t points_num = 10;
-	int i = 0;
-	for (i = 0; i < RAW_DATA_LEN; i++)
-	{
-		hys_data_buf[i] = (rand() % (uint16_t)(yValueMax * 25 - 1)) / 25.0;
-	}
-
-	for (i = 0; i < RAW_DATA_LEN; i++)
-	{
-		hys_data_buf[i] = 10 + ((int)hys_data_buf[i] - yValueMax / 2) * 0.03;
-	}
-	/**************仿真参数 stop *************/
-	bootAnimation();
-	//while (1)
-	//{
-	//	lv_tick_inc(1);
-	//	lv_task_handler();
-
-	//}
-	createMainPage(hys_data_buf, yValueMax, points_num);
-	//updateWavedata(yValueMax, points_num);
-	draw_hys_wave();
-
-	createSecondPage();
-	
-
-    SYSTEMTIME sys;
+	SYSTEMTIME sys;
 	uint16_t old_second = 0;
 	uint16_t old_Milliseconds = 0;
 	uint8_t num = 0;
 	uint8_t dir = 1;
-
-	for (uint16_t i = 0; i < 18; i++)
-	{
-		addWavedata(hys_data_buf[i]);
-	}
-
-
-	//gotopage(SECOND_PAGE);
-	device_icon(DEVICE_ONLINE);
-	set_bat_level(100);
+	createMainPage();
+	startMainPage();
 	
-	for (uint16_t i = 0; i < 0; i++)
-	{
-		SelectToRight();
-	}
-
-	for (uint16_t i = 0; i < 0; i++)
-	{
-		SelectToLeft();
-	}
-	gotopage(SECOND_PAGE);
-	device_icon(DEVICE_ONLINE);
-	int j = 0;
-	for (uint16_t i = 0; i < 5; )
-	{
-		j = 0;
-		while (j++ < 51)
-		{
-			lv_tick_inc(1);
-			lv_task_handler();
-
-		}
-		//removeWaveSelPoint();
-		//removeWavedata(0);
-
-	}
-
-	uint8_t sim_step = 0;
-	i = 0;
 	while (1)
 	{   
-		lv_tick_inc(1);
-		lv_task_handler();
-		/*********************************事件模拟************************************************/
-		GetLocalTime(&sys);
-		if (sys.wMilliseconds % 500 == 0 && old_Milliseconds != sys.wMilliseconds)
-		{
-			old_Milliseconds = sys.wMilliseconds;
-		}
-		if (sys.wSecond % 1 == 0 && old_second != sys.wSecond)
-		{
-			old_second = sys.wSecond;
-			if (num < 2)
-			{
-				num++;
-			}
-			else if (num < 100)
-			{
-				//num = 0;
-			}
+		//lv_tick_inc(1);
+		//lv_task_handler();
+
+		///*********************************事件模拟************************************************/
+		//GetLocalTime(&sys);
+		//if (sys.wMilliseconds % 500 == 0 && old_Milliseconds != sys.wMilliseconds)
+		//{
+		//	old_Milliseconds = sys.wMilliseconds;
+		//	
+
+		//}
+		//if (sys.wSecond % 1 == 0 && old_second != sys.wSecond)
+		//{
+		//	old_second = sys.wSecond;
+		//	if (num < 2)
+		//	{
+		//		num++;
+		//	}
+		//	else if (num < 100)
+		//	{
+		//		//num = 0;
+		//	}
 	
-			switch (sim_step)
-			{
-			case 1:
-				if (++i > 30)
-				{
-					i = 0;
-					sim_step++;
-					break;
-				}
-				addWavedata(hys_data_buf[i]);
+		//	switch (sim_step)
+		//	{
+		//	case 1:
+		//		if (++i > 30)
+		//		{
+		//			i = 0;
+		//			sim_step++;
+		//			break;
+		//		}
+		//		addWavedata(hys_data_buf[i]);
 
-				break;
-			case 2:
-				if (++i > 1)
-				{
-					i = 0;
-					sim_step++;
-					break;
-				}
-				gotopage(SECOND_PAGE);
-				break;
-			case 3:
-				if (++i > 10)
-				{
-					i = 0;
-					sim_step++;
-					break;
-				}
-				SelectToLeft();
-				break;
-			case 4:
-				if (++i > 5)
-				{
-					i = 0;
-					sim_step++;
-					break;
-				}
-				SelectToRight();
-				break;
-			case 5:
-				if (++i > 25)
-				{
-					i = 0;
-					sim_step++;
-					break;
-				}
+		//		break;
+		//	case 2:
+		//		if (++i > 1)
+		//		{
+		//			i = 0;
+		//			sim_step++;
+		//			break;
+		//		}
+		//		gotopage(SECOND_PAGE);
+		//		break;
+		//	case 3:
+		//		if (++i > 10)
+		//		{
+		//			i = 0;
+		//			sim_step++;
+		//			break;
+		//		}
+		//		SelectToLeft();
+		//		break;
+		//	case 4:
+		//		if (++i > 5)
+		//		{
+		//			i = 0;
+		//			sim_step++;
+		//			break;
+		//		}
+		//		SelectToRight();
+		//		break;
+		//	case 5:
+		//		if (++i > 25)
+		//		{
+		//			i = 0;
+		//			sim_step++;
+		//			break;
+		//		}
 
-				SelectToLeft();
-				break;
-			case 6:
-				if (++i > 10)
-				{
-					i = 0;
-					sim_step++;
-					break;
-				}
-				removeWaveSelPoint();
-				break;
-			case 7:
-				if (++i > 1)
-				{
-					i = 0;
-					sim_step = 1;
-					break;
-				}
-				gotopage(MAIN_PAGE);
-				break;
-			//case 8:
-			//	addWavedata(hys_data_buf[num]);
-			//	break;
+		//		SelectToLeft();
+		//		break;
+		//	case 6:
+		//		if (++i > 10)
+		//		{
+		//			i = 0;
+		//			sim_step++;
+		//			break;
+		//		}
+		//		removeWaveSelPoint();
+		//		break;
+		//	case 7:
+		//		if (++i > 1)
+		//		{
+		//			i = 0;
+		//			sim_step = 1;
+		//			break;
+		//		}
+		//		gotopage(MAIN_PAGE);
+		//		break;
+		//	//case 8:
+		//	//	addWavedata(hys_data_buf[num]);
+		//	//	break;
 
-			default:
-				break;
-			}
-		}
+		//	default:
+		//		break;
+		//	}
+		//}
 		/*********************************事件模拟**********************************************/
 
 	}

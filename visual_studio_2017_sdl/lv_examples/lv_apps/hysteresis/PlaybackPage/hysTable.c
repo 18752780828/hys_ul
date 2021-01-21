@@ -11,7 +11,6 @@
 
 LV_FONT_DECLARE(cizhi_kaiti);
 LV_FONT_DECLARE(cizhi_kaiti_18);
-LV_FONT_DECLARE(wenquanyi24);
 LV_FONT_DECLARE(yahei13);
 LV_FONT_DECLARE(yaheiscan15);
 LV_FONT_DECLARE(yahei15);
@@ -248,7 +247,11 @@ void hysTableMoveup(hysTable_t* hysTable)
 	uint8_t str[8];
 	uint8_t col = 1;
 	uint8_t row = 0;
-	
+
+	if (hysTable->rawEndIndex >= hysTable->rawDataNum)
+	{
+		return;
+	}
 
 	for (row = 1; row < TABLE_DATA_ROW; row++)
 	{
@@ -258,7 +261,9 @@ void hysTableMoveup(hysTable_t* hysTable)
 			lv_table_set_cell_value(hysTable->table, row, col, str);
 		}
 	}
-	i = hysTable->rawStartIndex+hysTable->selIndex;
+	i = hysTable->rawEndIndex;
+
+	hysTable->rawStartIndex += TABLE_DATA_COL;
 
 	strcpy(str, numTochar(1 + i / TABLE_DATA_COL));
 	lv_table_set_cell_value(hysTable->table, row, 0, str);
@@ -285,6 +290,11 @@ void hysTableMovedown(hysTable_t* hysTable)
 	uint8_t col = 0;
 	uint8_t row = TABLE_DATA_ROW;
 
+	if (hysTable->rawStartIndex)
+	{
+		return;
+	}
+
 	for (; row > 1; row--)
 	{
 		for (col = 0; col < TABLE_DATA_COL + 1; col++)
@@ -293,8 +303,8 @@ void hysTableMovedown(hysTable_t* hysTable)
 			lv_table_set_cell_value(hysTable->table, row, col, str);
 		}
 	}
-
-	i = hysTable->rawStartIndex + hysTable->selIndex;
+	hysTable->rawStartIndex -= TABLE_DATA_COL;
+	i = hysTable->rawStartIndex;
 	strcpy(str, numTochar(1 + i / TABLE_DATA_COL));
 	lv_table_set_cell_value(hysTable->table, 1, 0, str);
 
@@ -304,6 +314,38 @@ void hysTableMovedown(hysTable_t* hysTable)
 		strcpy(str, floatTochar(hysTable->rawData[i--]));
 		lv_table_set_cell_value(hysTable->table, 1, col, str);
 	}
+}
+
+
+void hysTableSelRL(hysTable_t* hysTable, uint8_t moveLeft)
+{
+	uint16_t selIndex = hysTable->selIndex;
+	hysTableNormallighCell(hysTable, selIndex);
+
+	if (moveLeft)
+	{
+		if (selIndex)
+		{
+			selIndex--;
+		}
+		else
+		{
+			hysTableMovedown(hysTable);
+		}
+
+	}
+	else
+	{
+		if (selIndex < hysTable->rawEndIndex - hysTable->rawStartIndex + 1)
+		{
+			selIndex++;
+		}
+		else
+		{
+			hysTableMoveup(hysTable);
+		}
+	}
+	hysTableHighlightCell(hysTable, selIndex);
 }
 
 void hysTableErase(hysTable_t* hysTable)
